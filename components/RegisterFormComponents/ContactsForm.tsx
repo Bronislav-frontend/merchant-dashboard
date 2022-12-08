@@ -3,24 +3,26 @@ import Image from "next/image";
 import TextArticle from "../TextArticle";
 import Input from "../Input";
 import TextUnderButton from "../TextUnderButton";
+import { userCredentials } from "../../interfaces/interfaces";
 import shownPassIcon from "../../assets/passShown.png";
 import hidenPassIcon from "../../assets/passHiden.png";
 
 interface ContactsFormProps {
   setStep: React.Dispatch<React.SetStateAction<number>>;
+  registerInfo: userCredentials;
+  setRegisterInfo: React.Dispatch<React.SetStateAction<userCredentials>>;
 }
 
-const ContactsForm = ({ setStep }: ContactsFormProps) => {
-  const [userInfo, setUserInfo] = useState({
-    email: "",
-    name: "",
-    password: "",
-  });
+const ContactsForm = ({
+  setStep,
+  registerInfo,
+  setRegisterInfo,
+}: ContactsFormProps) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInfo((prevState) => ({
+    setRegisterInfo((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -45,7 +47,7 @@ const ContactsForm = ({ setStep }: ContactsFormProps) => {
           spanText="Email"
           name="email"
           type="text"
-          value={userInfo.email}
+          value={registerInfo.email}
           placeholder="megachad@trychad.com"
           onChange={handleInputChange}
         />
@@ -53,26 +55,29 @@ const ContactsForm = ({ setStep }: ContactsFormProps) => {
           spanText="Your Name"
           name="name"
           type="text"
-          value={userInfo.name}
+          value={registerInfo.name}
           placeholder="Mega Chad"
           onChange={handleInputChange}
         />
         <label className="flex flex-col">
-          <span className="mb-[8px]"> Password</span>
+          <span className="mb-[8px] font-medium text-xs leading-[18px]">
+            {" "}
+            Password
+          </span>
           <div className="flex relative">
             <input
               name="password"
               type={isPasswordShown ? "text" : "password"}
-              value={userInfo.password}
+              value={registerInfo.password}
               placeholder="Enter Password"
               onChange={handleInputChange}
-              className="px-[17px] py-[10.5px] bg-[#F8F9FC] flex-1"
+              className="px-[17px] py-[10.5px] bg-[#F8F9FC] flex-1 placeholder:text-[#C3CAD5]"
             />
             <Image
               src={isPasswordShown ? shownPassIcon : hidenPassIcon}
               alt="eye icon"
               onClick={() => setIsPasswordShown(!isPasswordShown)}
-              className="absolute top-4 right-3"
+              className="absolute top-3.5 right-3"
             />
           </div>
         </label>

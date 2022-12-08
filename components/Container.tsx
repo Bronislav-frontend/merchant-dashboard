@@ -4,7 +4,7 @@ interface Props {
 
 const Container = ({ children }: Props) => {
   return (
-    <section className="px-[32px] pt-[16px] pb-[40px]">{children}</section>
+    <section className="px-[32px] pt-[16px] pb-[28px]">{children}</section>
   );
 };
 

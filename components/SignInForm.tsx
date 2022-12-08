@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
+import { toast } from "react-toastify";
 import Input from "./Input";
 import TextUnderButton from "./TextUnderButton";
 import shownPassIcon from "../assets/passShown.png";
@@ -22,6 +23,9 @@ const SignInForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    toast.success(
+      "There will be some action after press, when API would considere that"
+    );
   };
 
   return (

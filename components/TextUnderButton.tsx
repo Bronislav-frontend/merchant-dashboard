@@ -6,20 +6,31 @@ interface TextProps {
   route: string;
 }
 
+// NEED TO REFACTOR THIS
+
 const TextUnderButton = ({ linkText, spanText, route }: TextProps) => {
   return (
     <>
       {spanText && (
         <div className="flex justify-center">
-          <p className="mr-[3px]">{linkText}</p>
-          <Link className="text-[#32ABF2]" href={route}>
+          <p className="mr-[3px] text-sm leading-[18px]">{linkText}</p>
+          <Link className="text-[#32ABF2] text-sm leading-[18px]" href={route}>
             {spanText}
           </Link>
         </div>
       )}
-      {!spanText && <Link href={route}>{linkText}</Link>}
+      {!spanText && (
+        <Link
+          className="text-center text-sm leading-[18px] text-[#4F637D]"
+          href={route}
+        >
+          {linkText}
+        </Link>
+      )}
     </>
   );
 };
 
 export default TextUnderButton;
+
+// NEED TO REFACTOR THIS

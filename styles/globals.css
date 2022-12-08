@@ -20,6 +20,16 @@
     font-weight: 600;
     src: url("../fonts/Inter-SemiBold.ttf") format("ttf");
   }
+  html {
+    font-family: "Inter", sans-serif;
+  }
+  p {
+    color: #4f637d;
+  }
+
+  span {
+    color: #4f637d;
+  }
   /* @font-face {
     font-family: Euxodus;
     font-weight: 700;
