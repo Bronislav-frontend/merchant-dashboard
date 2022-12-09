@@ -7,6 +7,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {},
+      boxShadow: {
+        card: "0px 5px 20px rgba(108, 117, 139, 0.2)",
+      },
     },
     fontFamily: {
       main: ["Inter", "sans-serif"],

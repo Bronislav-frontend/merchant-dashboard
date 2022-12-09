@@ -1,7 +1,7 @@
 import Logo from "../components/Logo";
 import TextArticle from "../components/TextArticle";
 import SignInForm from "../components/SignInForm";
-import useCheckMobileScreen from "../hooks/useCheckMobileScreen";
+import useCheckMobileScreen from "../hooks/useWindowSize";
 
 const LoginPage = () => {
   const isMobile = useCheckMobileScreen();

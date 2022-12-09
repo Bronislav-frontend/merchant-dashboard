@@ -36,9 +36,9 @@ const Input = ({
           placeholder={placeholder}
           onChange={onChange}
           onBlur={onBlur}
-          className={`px-[17px] py-[10.5px] bg-[#F8F9FC] rounded mb-2 placeholder:text-[#C3CAD5] ${
+          className={`px-[17px] py-[10.5px] bg-[#F8F9FC] rounded mb-2 placeholder:text-[#C3CAD5]  ${
             error && touched && "border border-[#D24646]"
-          }`}
+          }  focus:outline-none focus:border focus:border-[#32ABF2] focus:bg-white`}
         />
       </label>
       {touched && error && (

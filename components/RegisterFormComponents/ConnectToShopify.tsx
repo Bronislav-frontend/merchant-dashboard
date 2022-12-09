@@ -4,7 +4,7 @@ import { userCredentials } from "../../interfaces/interfaces";
 import TextArticle from "../TextArticle";
 import BenefitItem from "./BenefitItem";
 import TextUnderButton from "../TextUnderButton";
-import StoreConnectionSuccess from "../StoreConnectionSuccess";
+import ConnectionSuccess from "../ConnectionSuccess";
 
 const textArray = [
   {
@@ -34,16 +34,23 @@ const ConnectToShopify = ({
   registerInfo,
   setRegisterInfo,
 }: ConnectToShopifyProps) => {
-  // const [onSuccess, setOnSuccess] = useState(false);
+  const [data, setData] = useState({
+    shop_logo_url: "",
+    shop_name: "",
+    token: "",
+    status: "",
+  });
+  const [onSuccess, setOnSuccess] = useState(false);
 
   // THIS SHOULD BE IMPROVED
 
   const handleButtonClick = () => {
-    setStep((prevStep) => prevStep + 1);
     const getShopifyToken = async () => {
       const response = await axios.get(`${process.env.API_URL}/shopify`, {
         params: { name: registerInfo.name },
       });
+      if (response.data.status === "success") setOnSuccess(true);
+      setData(response.data);
       setRegisterInfo((prevState) => ({
         ...prevState,
         shop_token: response.data.token,
@@ -52,35 +59,48 @@ const ConnectToShopify = ({
     getShopifyToken();
   };
 
+  console.log(data);
+
   // THIS SHOULD BE IMPROVED
 
   return (
     <>
-      <div className="flex flex-col">
-        <TextArticle
-          title={"Connect to Shopify Store"}
-          paragraph={
-            "Installs the Chad widget in your Shopify store and sets it up to display your customers order information and self-serve options."
-          }
+      {!onSuccess && (
+        <div className="flex flex-col">
+          <TextArticle
+            title={"Connect to Shopify Store"}
+            paragraph={
+              "Installs the Chad widget in your Shopify store and sets it up to display your customers order information and self-serve options."
+            }
+          />
+          <ul className="p-[16px] bg-[#F8F9FC] rounded-lg grid gap-4">
+            {textArray.map((text, index) => (
+              <BenefitItem
+                key={index}
+                title={text.title}
+                description={text.description}
+              />
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={handleButtonClick}
+            className="bg-[#32ABF2] py-[11px] rounded-lg  text-center text-white mt-[32px] mb-[16px]"
+          >
+            Connect store
+          </button>
+          <TextUnderButton linkText={"I don`t use Shopify"} route={""} />
+        </div>
+      )}
+      {onSuccess && (
+        <ConnectionSuccess
+          image={data.shop_logo_url}
+          setStep={setStep}
+          title="Store Connected"
+          text={`Chad is now able to manage customer support requests for ${data.shop_name}`}
+          buttonText="Continue"
         />
-        <ul className="p-[16px] bg-[#F8F9FC] rounded-lg grid gap-4">
-          {textArray.map((text, index) => (
-            <BenefitItem
-              key={index}
-              title={text.title}
-              description={text.description}
-            />
-          ))}
-        </ul>
-        <button
-          type="button"
-          onClick={handleButtonClick}
-          className="bg-[#32ABF2] py-[11px] rounded-lg  text-center text-white mt-[32px] mb-[16px]"
-        >
-          Connect store
-        </button>
-        <TextUnderButton linkText={"I don`t use Shopify"} route={""} />
-      </div>
+      )}
     </>
   );
 };
