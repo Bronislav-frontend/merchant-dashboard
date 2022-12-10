@@ -24,7 +24,7 @@ const ConnectionSuccess = ({
   };
 
   return (
-    <div className="absolute top-0 left-0 w-[100%] h-[100%] bg-white pt-[112px] px-8">
+    <div className="absolute top-0 left-0  bg-white pt-[112px] px-8">
       <article className="flex flex-col justify-center items-center relative">
         <Image
           src={image ? image : successBigIcon}

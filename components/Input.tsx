@@ -6,7 +6,7 @@ interface InputProps {
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (e: React.FocusEvent) => void;
+  onBlur?: (e: React.FocusEvent) => void;
   placeholder: string;
   error?: string;
   touched?: boolean;
@@ -36,9 +36,12 @@ const Input = ({
           placeholder={placeholder}
           onChange={onChange}
           onBlur={onBlur}
-          className={`px-[17px] py-[10.5px] bg-[#F8F9FC] rounded mb-2 placeholder:text-[#C3CAD5]  ${
-            error && touched && "border border-[#D24646]"
-          }  focus:outline-none focus:border focus:border-[#32ABF2] focus:bg-white`}
+          className={`px-[17px] py-[10.5px] bg-[#F8F9FC] rounded mb-2 placeholder:text-[#C3CAD5] focus:outline-none focus:border focus:border-[#32ABF2] focus:bg-white ${
+            error &&
+            touched &&
+            "border border-[#D24646] focus:outline-none focus:border focus:border-[#D24646]"
+          }`}
+          autoComplete="off"
         />
       </label>
       {touched && error && (

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import Button from "./Button";
 import Input from "./Input";
 import TextUnderButton from "./TextUnderButton";
 import shownPassIcon from "../assets/passShown.png";
@@ -47,7 +48,8 @@ const SignInForm = () => {
             value={userInfo.password}
             placeholder="Enter Password"
             onChange={handleInputChange}
-            className="px-[17px] py-[10.5px] bg-[#F8F9FC] flex-1"
+            className="px-[17px] py-[10.5px] bg-[#F8F9FC] flex-1 rounded focus:bg-white focus:outline-none focus:border focus:border-[#32ABF2]"
+            autoComplete="off"
           />
           <Image
             src={isPasswordShown ? shownPassIcon : hidenPassIcon}
@@ -57,14 +59,9 @@ const SignInForm = () => {
           />
         </div>
       </label>
-      <button
-        type="submit"
-        className="bg-[#32ABF2] py-[11px] rounded-lg  text-center text-white mt-[32px] mb-[16px]"
-      >
-        Login
-      </button>
+      <Button type="submit" text="Login" />
       <TextUnderButton
-        linkText={"Don’t have an account?"}
+        linkText={"Don`t have an account?"}
         spanText={"Join the waitlist"}
         route={"/"}
       />

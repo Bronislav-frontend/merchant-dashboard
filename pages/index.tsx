@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Router from "next/router";
 import axios from "axios";
+import useWindowSize from "../hooks/useWindowSize";
+import LeftSidebar from "../components/LeftSidebar";
 import RegistrationProgress from "../components/RegisterFormComponents/RegistrationProgress";
 import ContactsForm from "../components/RegisterFormComponents/ContactsForm";
 import ConnectToShopify from "../components/RegisterFormComponents/ConnectToShopify";
@@ -16,6 +18,8 @@ const Signup = () => {
     shop_token: "",
     google_token: "",
   });
+
+  const size = useWindowSize();
 
   const registerUser = async () => {
     const resp = await axios.post(
@@ -55,14 +59,19 @@ const Signup = () => {
   };
 
   return (
-    <div className="px-[32px] pt-[16px] pb-[28px] md:bg-white md:px-[72px] md:pt-[80px] md:pb-[64px] md:rounded-lg md:shadow-card md:max-w-[540px] mx-auto">
-      <Logo />
-      <RegistrationProgress
-        step={step}
-        setStep={setStep}
-        registerInfo={registerInfo}
-      />
-      {multiStepForm()}
+    <div className="xl:flex">
+      {size.width > 1280 && <LeftSidebar />}
+      <div className="xl:flex xl:flex-1 xl:pt-[132px] xl:pb-[68px]">
+        <div className="px-[32px] pt-[16px] pb-[28px] md:bg-white md:px-[72px] md:pt-[80px] md:pb-[64px] md:rounded-lg md:shadow-card md:max-w-[540px] md:mx-auto xl:max-w-[480px] lg:px-10 lg:py-[64px]">
+          <Logo />
+          <RegistrationProgress
+            step={step}
+            setStep={setStep}
+            registerInfo={registerInfo}
+          />
+          {multiStepForm()}
+        </div>
+      </div>
     </div>
   );
 };

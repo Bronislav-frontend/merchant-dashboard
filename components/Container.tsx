@@ -4,7 +4,7 @@ interface Props {
 
 const Container = ({ children }: Props) => {
   return (
-    <section className="md:bg-[url('../assets/bg.png')] md:pt-[132px] lg:py-[51px]">
+    <section className="md:bg-[url('../assets/bg.png')] md:pt-[132px] lg:py-[51px] xl:py-0">
       {children}
     </section>
   );

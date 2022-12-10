@@ -1,25 +1,21 @@
-// import Router from "next/router";
+interface ButtonProps {
+  text: string;
+  type: "button" | "submit";
+  handleClick?: () => void;
+  isDisabled?: boolean;
+}
 
-// interface ButtonProps {
-//   text: string;
-//   type: "button" | "submit" | "reset" | undefined;
-//   route: string;
-// }
+const Button = ({ text, type, handleClick, isDisabled }: ButtonProps) => {
+  return (
+    <button
+      disabled={isDisabled}
+      type={type}
+      onClick={handleClick}
+      className="bg-[#32ABF2] py-[11px] rounded-lg  text-center text-white mb-[16px] mt-[32px]"
+    >
+      {text}
+    </button>
+  );
+};
 
-// const Button = ({ text, type, route }: ButtonProps) => {
-//   const handleButtonClick = (route: string) => {
-//     Router.push(route);
-//   };
-
-//   return (
-//     <button
-//       type={type}
-//       onClick={() => handleButtonClick(route)}
-//       className="bg-[#32ABF2] py-[11px] rounded-lg  text-center text-white mb-[16px]"
-//     >
-//       {text}
-//     </button>
-//   );
-// };
-
-// export default Button;
+export default Button;

@@ -2,10 +2,11 @@ import { useState } from "react";
 import Image from "next/image";
 import { Formik, Form } from "formik";
 import { SignupSchema } from "../../helpers/Yup.schema";
+import { userCredentials } from "../../interfaces/interfaces";
 import TextArticle from "../TextArticle";
 import Input from "../Input";
+import Button from "../Button";
 import TextUnderButton from "../TextUnderButton";
-import { userCredentials } from "../../interfaces/interfaces";
 import shownPassIcon from "../../assets/passShown.png";
 import hidenPassIcon from "../../assets/passHiden.png";
 
@@ -84,7 +85,11 @@ const ContactsForm = ({ setStep, setRegisterInfo }: ContactsFormProps) => {
                     placeholder="Enter Password"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className={`px-[17px] py-[10.5px] bg-[#F8F9FC] rounded flex-1 placeholder:text-[#C3CAD5]`}
+                    className={`px-[17px] py-[10.5px] bg-[#F8F9FC] rounded flex-1 placeholder:text-[#C3CAD5] focus:outline-none focus:border focus:border-[#32ABF2] focus:bg-white ${
+                      errors.password &&
+                      touched.password &&
+                      "border border-[#D24646] focus:outline-none focus:border focus:border-[#D24646]"
+                    }`}
                   />
                   <Image
                     src={isPasswordShown ? shownPassIcon : hidenPassIcon}
@@ -98,13 +103,11 @@ const ContactsForm = ({ setStep, setRegisterInfo }: ContactsFormProps) => {
                   <p className="text-[#D24646] text-xs">{errors.password}</p>
                 )}
               </label>
-              <button
+              <Button
                 type="submit"
-                disabled={!isValid}
-                className="bg-[#32ABF2] py-[11px] rounded-lg  text-center text-white mt-[32px] mb-[16px]"
-              >
-                Create account
-              </button>
+                isDisabled={!isValid}
+                text="Create account"
+              />
               <TextUnderButton
                 linkText={"Already have an account?"}
                 spanText={"Login"}

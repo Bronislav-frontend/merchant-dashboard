@@ -5,6 +5,7 @@ import TextArticle from "../TextArticle";
 import BenefitItem from "./BenefitItem";
 import TextUnderButton from "../TextUnderButton";
 import ConnectionSuccess from "../ConnectionSuccess";
+import Button from "../Button";
 
 const textArray = [
   {
@@ -82,13 +83,11 @@ const ConnectToShopify = ({
               />
             ))}
           </ul>
-          <button
+          <Button
             type="button"
-            onClick={handleButtonClick}
-            className="bg-[#32ABF2] py-[11px] rounded-lg  text-center text-white mt-[32px] mb-[16px]"
-          >
-            Connect store
-          </button>
+            text="Connect store"
+            handleClick={handleButtonClick}
+          />
           <TextUnderButton linkText={"I don`t use Shopify"} route={""} />
         </div>
       )}
