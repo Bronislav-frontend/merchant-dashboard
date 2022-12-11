@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Image from "next/image";
 import { Formik, Form } from "formik";
 import { SignupSchema } from "../../helpers/Yup.schema";
-import { userCredentials } from "../../interfaces/interfaces";
+import { UserInfo } from "../../interfaces/interfaces";
+import FormValuesContext from "../../context/FormContext";
 import TextArticle from "../TextArticle";
 import Input from "../Input";
 import Button from "../Button";
@@ -10,29 +11,15 @@ import TextUnderButton from "../TextUnderButton";
 import shownPassIcon from "../../assets/passShown.png";
 import hidenPassIcon from "../../assets/passHiden.png";
 
-interface ContactsFormProps {
-  setStep: React.Dispatch<React.SetStateAction<number>>;
-  setRegisterInfo: React.Dispatch<React.SetStateAction<userCredentials>>;
-}
-
-interface FormValues {
-  email: string;
-  name: string;
-  password: string;
-}
-
-const ContactsForm = ({ setStep, setRegisterInfo }: ContactsFormProps) => {
+const ContactsForm = () => {
+  const { handleAddFormValues, handleChangeStep } =
+    useContext(FormValuesContext);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const initialValues: FormValues = { email: "", name: "", password: "" };
+  const initialValues: UserInfo = { email: "", name: "", password: "" };
 
-  const handleSubmit = ({ email, name, password }: FormValues) => {
-    setRegisterInfo((prevState) => ({
-      ...prevState,
-      email,
-      name,
-      password,
-    }));
-    setStep((prevStep) => prevStep + 1);
+  const handleSubmit = (info: UserInfo) => {
+    handleAddFormValues(info);
+    handleChangeStep(2);
   };
 
   return (
@@ -92,7 +79,7 @@ const ContactsForm = ({ setStep, setRegisterInfo }: ContactsFormProps) => {
                     }`}
                   />
                   <Image
-                    src={isPasswordShown ? shownPassIcon : hidenPassIcon}
+                    src={isPasswordShown ? hidenPassIcon : shownPassIcon}
                     alt="eye icon"
                     onClick={() => setIsPasswordShown(!isPasswordShown)}
                     className="absolute top-3.5 right-3"

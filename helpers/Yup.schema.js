@@ -12,5 +12,6 @@ export const SignupSchema = Yup.object().shape({
   password: Yup.string()
     .min(6, "Password must consist at least 6 characters")
     .max(60, "Too Long!")
+    .trim("Password can`t consist only spaces")
     .required("This field cannot be empty"),
 });

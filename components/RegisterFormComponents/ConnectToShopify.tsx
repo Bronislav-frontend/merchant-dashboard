@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import axios from "axios";
-import { userCredentials } from "../../interfaces/interfaces";
+import FormValuesContext from "../../context/FormContext";
 import TextArticle from "../TextArticle";
 import BenefitItem from "./BenefitItem";
 import TextUnderButton from "../TextUnderButton";
-import ConnectionSuccess from "../ConnectionSuccess";
 import Button from "../Button";
 
 const textArray = [
@@ -24,83 +24,68 @@ const textArray = [
   },
 ];
 
-interface ConnectToShopifyProps {
-  setStep: React.Dispatch<React.SetStateAction<number>>;
-  registerInfo: userCredentials;
-  setRegisterInfo: React.Dispatch<React.SetStateAction<userCredentials>>;
+interface ShopData {
+  shop_logo_url: string;
+  shop_name: string;
+  token: string;
+  status: string;
 }
 
-const ConnectToShopify = ({
-  setStep,
-  registerInfo,
-  setRegisterInfo,
-}: ConnectToShopifyProps) => {
-  const [data, setData] = useState({
-    shop_logo_url: "",
-    shop_name: "",
-    token: "",
-    status: "",
-  });
-  const [onSuccess, setOnSuccess] = useState(false);
+interface ConnectToShopifyProps {
+  setShopData: React.Dispatch<React.SetStateAction<ShopData>>;
+}
 
-  // THIS SHOULD BE IMPROVED
+const ConnectToShopify = ({ setShopData }: ConnectToShopifyProps) => {
+  const { formState, handleAddShopToken, handleChangeStep } =
+    useContext(FormValuesContext);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getShopifyToken = async () => {
+    try {
+      const response = await axios.get(`${process.env.API_URL}/shopify`, {
+        params: { name: formState.name },
+      });
+      setIsLoading(false);
+      if (response.data.status === "success")
+        handleAddShopToken(response.data.token);
+      setShopData(response.data);
+      handleChangeStep(formState.step + 1);
+    } catch (error) {
+      toast.error("Something went wrong");
+      alert(error);
+    }
+  };
 
   const handleButtonClick = () => {
-    const getShopifyToken = async () => {
-      const response = await axios.get(`${process.env.API_URL}/shopify`, {
-        params: { name: registerInfo.name },
-      });
-      if (response.data.status === "success") setOnSuccess(true);
-      setData(response.data);
-      setRegisterInfo((prevState) => ({
-        ...prevState,
-        shop_token: response.data.token,
-      }));
-    };
+    setIsLoading(true);
     getShopifyToken();
   };
 
-  console.log(data);
-
-  // THIS SHOULD BE IMPROVED
-
   return (
-    <>
-      {!onSuccess && (
-        <div className="flex flex-col">
-          <TextArticle
-            title={"Connect to Shopify Store"}
-            paragraph={
-              "Installs the Chad widget in your Shopify store and sets it up to display your customers order information and self-serve options."
-            }
+    <div className="flex flex-col">
+      <TextArticle
+        title={"Connect to Shopify Store"}
+        paragraph={
+          "Installs the Chad widget in your Shopify store and sets it up to display your customers order information and self-serve options."
+        }
+      />
+      <ul className="p-[16px] bg-[#F8F9FC] rounded-lg grid gap-4">
+        {textArray.map((text, index) => (
+          <BenefitItem
+            key={index}
+            title={text.title}
+            description={text.description}
           />
-          <ul className="p-[16px] bg-[#F8F9FC] rounded-lg grid gap-4">
-            {textArray.map((text, index) => (
-              <BenefitItem
-                key={index}
-                title={text.title}
-                description={text.description}
-              />
-            ))}
-          </ul>
-          <Button
-            type="button"
-            text="Connect store"
-            handleClick={handleButtonClick}
-          />
-          <TextUnderButton linkText={"I don`t use Shopify"} route={""} />
-        </div>
-      )}
-      {onSuccess && (
-        <ConnectionSuccess
-          image={data.shop_logo_url}
-          setStep={setStep}
-          title="Store Connected"
-          text={`Chad is now able to manage customer support requests for ${data.shop_name}`}
-          buttonText="Continue"
-        />
-      )}
-    </>
+        ))}
+      </ul>
+      <Button
+        type="button"
+        text="Connect store"
+        handleClick={handleButtonClick}
+        isLoading={isLoading}
+      />
+      <TextUnderButton linkText={"I don`t use Shopify"} route={""} />
+    </div>
   );
 };
 

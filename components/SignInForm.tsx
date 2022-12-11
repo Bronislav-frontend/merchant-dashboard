@@ -25,7 +25,7 @@ const SignInForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success(
-      "There will be some action after press, when API would considere that"
+      "There will be some action after your press, when API would considere that"
     );
   };
 
@@ -52,7 +52,7 @@ const SignInForm = () => {
             autoComplete="off"
           />
           <Image
-            src={isPasswordShown ? shownPassIcon : hidenPassIcon}
+            src={isPasswordShown ? hidenPassIcon : shownPassIcon}
             alt="eye icon"
             onClick={() => setIsPasswordShown(!isPasswordShown)}
             className="absolute top-4 right-3"

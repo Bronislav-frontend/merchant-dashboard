@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { useContext } from "react";
+import FormValuesContext from "../context/FormContext";
 import TextUnderButton from "./TextUnderButton";
 import successIcon from "../assets/successSmall.png";
 import successBigIcon from "../assets/successBig.png";
@@ -6,7 +8,6 @@ import successBigIcon from "../assets/successBig.png";
 interface ConnectionSuccessProps {
   image?: string;
   shopName?: string;
-  setStep: React.Dispatch<React.SetStateAction<number>>;
   title: string;
   text: string;
   buttonText: string;
@@ -14,17 +15,18 @@ interface ConnectionSuccessProps {
 
 const ConnectionSuccess = ({
   image,
-  setStep,
   title,
   text,
   buttonText,
 }: ConnectionSuccessProps) => {
+  const { handleChangeStep, formState } = useContext(FormValuesContext);
+
   const handleButtonClick = () => {
-    setStep((prevStep) => prevStep + 1);
+    handleChangeStep(formState.step + 1);
   };
 
   return (
-    <div className="absolute top-0 left-0  bg-white pt-[112px] px-8">
+    <div className=" bg-white pt-[112px] md:pt-0 px-8 xl:py-[62px] h-min">
       <article className="flex flex-col justify-center items-center relative">
         <Image
           src={image ? image : successBigIcon}
