@@ -1,7 +1,3 @@
-// interface IconProps {
-//   step: number;
-// }
-
 const StepSuccessIcon = () => {
   return (
     <div>

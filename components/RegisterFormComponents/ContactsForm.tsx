@@ -2,6 +2,8 @@ import { useState, useContext } from "react";
 import Image from "next/image";
 import { Formik, Form } from "formik";
 import { SignupSchema } from "../../helpers/Yup.schema";
+import Logo from "../Logo";
+import RegistrationProgress from "./RegistrationProgress";
 import { UserInfo } from "../../interfaces/interfaces";
 import FormValuesContext from "../../context/FormContext";
 import TextArticle from "../TextArticle";
@@ -11,7 +13,15 @@ import TextUnderButton from "../TextUnderButton";
 import shownPassIcon from "../../assets/passShown.png";
 import hidenPassIcon from "../../assets/passHiden.png";
 
-const ContactsForm = () => {
+interface ContactsFormProps {
+  isProgressbarHidden: boolean;
+  setIsProgressbarHidden: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ContactsForm = ({
+  isProgressbarHidden,
+  setIsProgressbarHidden,
+}: ContactsFormProps) => {
   const { handleAddFormValues, handleChangeStep } =
     useContext(FormValuesContext);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -19,11 +29,14 @@ const ContactsForm = () => {
 
   const handleSubmit = (info: UserInfo) => {
     handleAddFormValues(info);
+    setIsProgressbarHidden(false);
     handleChangeStep(2);
   };
 
   return (
     <>
+      <Logo />
+      {!isProgressbarHidden && <RegistrationProgress />}
       <TextArticle
         title={"Welcome to Chad"}
         paragraph={

@@ -1,91 +1,125 @@
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Logo from "../Logo";
+import RegistrationProgress from "./RegistrationProgress";
 import FormValuesContext from "../../context/FormContext";
 import TextArticle from "../TextArticle";
 import BenefitItem from "./BenefitItem";
-import TextUnderButton from "../TextUnderButton";
+import ConnectionSuccess from "../ConnectionSuccess";
+import UserDoNotUse from "../UserDoNotUse";
 import Button from "../Button";
-
-const textArray = [
-  {
-    title: "Track orders and shipping",
-    description: "Global coverage with 600+ couriers supported",
-  },
-  {
-    title: "Manage orders",
-    description:
-      "Allow customers to track, return, exchange, or report problems with their orders",
-  },
-  {
-    title: "Process returns and exchanges",
-    description:
-      "Automatically checks your store policy and existing inventory before resolving or escalating each request",
-  },
-];
-
-interface ShopData {
-  shop_logo_url: string;
-  shop_name: string;
-  token: string;
-  status: string;
-}
+import { TEXT_ARRAY_SHOPIFY } from "../../helpers/variables";
+import { SHOP_PLATFORMS } from "../../helpers/variables";
 
 interface ConnectToShopifyProps {
-  setShopData: React.Dispatch<React.SetStateAction<ShopData>>;
+  setShopName: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const ConnectToShopify = ({ setShopData }: ConnectToShopifyProps) => {
-  const { formState, handleAddShopToken, handleChangeStep } =
-    useContext(FormValuesContext);
+const ConnectToShopify = ({ setShopName }: ConnectToShopifyProps) => {
+  const { formState, handleAddShopToken } = useContext(FormValuesContext);
+  const [shopData, setShopData] = useState({
+    shop_logo_url: "",
+    shop_name: "",
+    token: "",
+    status: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
+  const [isConnectionSuccess, setIsConnectionSuccess] = useState(false);
+  const [isUsingShopify, setIsUsingShopify] = useState(true);
 
   const getShopifyToken = async () => {
     try {
-      const response = await axios.get(`${process.env.API_URL}/shopify`, {
+      const { data } = await axios.get(`${process.env.API_URL}/shopify`, {
         params: { name: formState.name },
       });
       setIsLoading(false);
-      if (response.data.status === "success")
-        handleAddShopToken(response.data.token);
-      setShopData(response.data);
-      handleChangeStep(formState.step + 1);
+      if (data.status === "success") {
+        handleAddShopToken(data.token);
+        setShopData(data);
+        setShopName(data.shop_name);
+        setIsConnectionSuccess(true);
+      } else if (data.status === "failure") {
+        toast.error(data.message);
+      }
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error(
+        "Chad couldn’t connect to your Shopify account. Please try again."
+      );
       alert(error);
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonSubmit = () => {
     setIsLoading(true);
     getShopifyToken();
   };
 
   return (
-    <div className="flex flex-col">
-      <TextArticle
-        title={"Connect to Shopify Store"}
-        paragraph={
-          "Installs the Chad widget in your Shopify store and sets it up to display your customers order information and self-serve options."
-        }
-      />
-      <ul className="p-[16px] bg-[#F8F9FC] rounded-lg grid gap-4">
-        {textArray.map((text, index) => (
-          <BenefitItem
-            key={index}
-            title={text.title}
-            description={text.description}
+    <>
+      {isUsingShopify && !isConnectionSuccess && (
+        <div>
+          <Logo />
+          <RegistrationProgress />
+          <TextArticle
+            title={"Welcome to Chad"}
+            paragraph={
+              "Go live in 10 minutes! Our self-service widget empowers your customers to manage orders and track shipments 24/7 without driving you crazy."
+            }
           />
-        ))}
-      </ul>
-      <Button
-        type="button"
-        text="Connect store"
-        handleClick={handleButtonClick}
-        isLoading={isLoading}
-      />
-      <TextUnderButton linkText={"I don`t use Shopify"} route={""} />
-    </div>
+          <div className="flex flex-col">
+            <TextArticle
+              title={"Connect to Shopify Store"}
+              paragraph={
+                "Installs the Chad widget in your Shopify store and sets it up to display your customers order information and self-serve options."
+              }
+            />
+            <ul className="p-[16px] bg-[#F8F9FC] rounded-lg grid gap-4">
+              {TEXT_ARRAY_SHOPIFY.map((text, index) => (
+                <BenefitItem
+                  key={index}
+                  title={text.title}
+                  description={text.description}
+                />
+              ))}
+            </ul>
+            <Button
+              type="button"
+              text="Connect store"
+              handleClick={handleButtonSubmit}
+              isLoading={isLoading}
+            />
+            <button
+              type="button"
+              onClick={() => setIsUsingShopify(false)}
+              className="text-sm leading-[18px] text-[#757C8A]"
+            >
+              I don`t use Shopify
+            </button>
+          </div>
+        </div>
+      )}
+      {isUsingShopify && isConnectionSuccess && (
+        <ConnectionSuccess
+          image={shopData.shop_logo_url}
+          title="Store Connected"
+          text={`Chad is now able to manage customer support requests for ${shopData.shop_name}`}
+          buttonText="Continue"
+          onIsSuccessChange={setIsConnectionSuccess}
+        />
+      )}
+      {!isUsingShopify && (
+        <div>
+          <UserDoNotUse
+            title="Don`t use Shopify?"
+            text="Unfortunately, Chad Beta is currently only available on Shopify. Let us know what platform you use and we’ll let you know when Chad becomes available there."
+            platformsArray={SHOP_PLATFORMS}
+            pText="Actually use Shopify?"
+            isUsing={setIsUsingShopify}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
